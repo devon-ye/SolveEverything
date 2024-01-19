@@ -12,7 +12,7 @@
       <img
         src="../assets/login/logo-small.png"
         alt="logo"
-        @click="goDetail('https://ai.youdao.com/')"
+        @click="goDetail('https://www.youdao.com/')"
       />
     </div>
     <ul>
@@ -23,7 +23,7 @@
       <li>
         <a-popover placement="bottomRight" overlay-class-name="cooperate">
           <template #content>
-            <p>Aldoud_Business@corp.youdao.com</p>
+            <p>marketing@yuntun.group</p>
           </template>
           <template #title>
             <span>更多合作请咨询</span>

@@ -1,6 +1,10 @@
 from sanic import Sanic, response
 from paddleocr import PaddleOCR
 import sys
+from sanic.worker.manager import WorkerManager
+
+
+WorkerManager.THRESHOLD = 6000
 
 # 创建 Sanic 应用
 app = Sanic("OCRService")
