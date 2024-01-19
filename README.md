@@ -39,6 +39,7 @@
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
+- [FAQ](#FAQ)
 - [Usage](#usage)
   - [API Document](#API-Document)
 - [WeChat Group](#WeChat-Group)
@@ -49,7 +50,7 @@
 </details>
 
 ## What is QAnything?
-**Q**uestion and **A**nswer based on **Anything** (`QAnything`) is a local knowledge base question-answering system designed to support a wide range of file formats and databases, allowing for offline installation and use.
+`QAnything`(**Q**uestion and **A**nswer based on **Anything**) is a local knowledge base question-answering system designed to support a wide range of file formats and databases, allowing for offline installation and use.
 
 With `QAnything`, you can simply drop any locally stored file of any format and receive accurate, fast, and reliable answers.
 
@@ -65,6 +66,9 @@ Currently supported formats include: **PDF, Word (doc/docx), PPT, Markdown, Eml,
 - **User-friendly**, no need for cumbersome configurations, one-click installation and deployment, ready to use.
 - **Multi knowledge base QA** Support selecting multiple knowledge bases for Q&A
 
+
+
+
 ### Architecture
 <div align="center">
 <img src="docs/images/qanything_arch.png" width = "700" alt="qanything_system" align=center />
@@ -77,7 +81,7 @@ In scenarios with a large volume of knowledge base data, the advantages of a two
 </div>
 
 QAnything uses the retrieval component [BCEmbedding](https://github.com/netease-youdao/BCEmbedding), which is distinguished for its bilingual and crosslingual proficiency. BCEmbedding excels in bridging Chinese and English linguistic gaps, which achieves
-- **A high performence on <a href="https://github.com/netease-youdao/BCEmbedding/tree/master?tab=readme-ov-file#evaluate-semantic-representation-by-mteb" target="_Self">Semantic Representation Evaluations in MTEB</a>**;
+- **A high performance on <a href="https://github.com/netease-youdao/BCEmbedding/tree/master?tab=readme-ov-file#evaluate-semantic-representation-by-mteb" target="_Self">Semantic Representation Evaluations in MTEB</a>**;
 - **A new benchmark in the realm of <a href="https://github.com/netease-youdao/BCEmbedding/tree/master?tab=readme-ov-file#evaluate-rag-by-llamaindex" target="_Self">RAG Evaluations in LlamaIndex</a>**.
 
 
@@ -111,7 +115,7 @@ QAnything uses the retrieval component [BCEmbedding](https://github.com/netease-
 ***NOTE:***
 
 - In `WithoutReranker` setting, our `bce-embedding-base_v1` outperforms all the other embedding models.
-- With fixing the embedding model, our `bce-reranker-base_v1` achieves the best performence.
+- With fixing the embedding model, our `bce-reranker-base_v1` achieves the best performance.
 - **The combination of `bce-embedding-base_v1` and `bce-reranker-base_v1` is SOTA**.
 - If you want to use embedding and rerank separately, please refer to [BCEmbedding](https://github.com/netease-youdao/BCEmbedding)
 
@@ -120,132 +124,84 @@ QAnything uses the retrieval component [BCEmbedding](https://github.com/netease-
 The open source version of QAnything is based on QwenLM and has been fine-tuned on a large number of professional question-answering datasets. It greatly enhances the ability of question-answering.
 If you need to use it for commercial purposes, please follow the license of QwenLM. For more details, please refer to: [QwenLM](https://github.com/QwenLM/Qwen)
 
+## Before You Start
+**Star us on GitHub, and be instantly notified for new release!**
+![star_us](https://github.com/netease-youdao/QAnything/assets/29041332/fd5e5926-b9b2-4675-9f60-6cdcaca18e14)
+* [🏄 Try QAnything Online](https://qanything.ai)
+* [📚 Try read.youdao.com | 有道速读](https://read.youdao.com)
+* [🛠️ Only use our BCEmbedding(embedding & rerank)](https://github.com/netease-youdao/BCEmbedding)
+* [📖 FAQ](FAQ_zh.md)
 
 ## Getting Started
-[:point_right: try QAnything online](https://qanything.ai)
+
 ### Prerequisites
+#### **For Linux**
+|**System**| **Required item**        | **Minimum Requirement**   | **Note**                                                                           |
+|---------------------------|--------------------------|---------------------------|-------------------------------------------------------------------------|
+|Linux | Single NVIDIA GPU Memory  <br> or Double NVIDIA GPU Memory | >= 16GB <br> >= 11GB + 5G    | NVIDIA 3090 x 1 recommended <br> NVIDIA 2080TI × 2 recommended            |
+|      | NVIDIA Driver Version    | >= 525.105.17             |                                                                                               |
+|      | CUDA Version             | >= 12.0                   |                                                                                               |
+|      |  Docker version           | >= 20.10.5                |  [Docker install](https://docs.docker.com/engine/install/) |
+|      | docker compose  version  | >= 2.23.3                 | [docker compose install](https://docs.docker.com/compose/install/)  |
 
-|  **Required item**     | **Minimum Requirement** | **Note** |
-| --------------         |------------------------| --------------------------------- |
-| NVIDIA GPU Memory      | >= 16GB                | NVIDIA 3090 recommended |
-| NVIDIA Driver Version  | >= 525.105.17          |                           |
-| CUDA Version           | >= 12.0                |                           |
-| docker compose  version| >= 2.12.1              | [docker compose install](https://docs.docker.com/compose/install/)|
-
+#### **For Winodws 11 with WSL 2**
+|**System**| **Required item**        | **Minimum Requirement**   | **Note**                                                                           |
+|---------------------------|--------------------------|---------------------------|-----------------------------------------------------------------------------------------------|
+|Windows 11 with WSL 2| Single NVIDIA GPU Memory <br> or Double NVIDIA GPU Memory | >= 16GB  <br>  >= 11GB + 5G                | NVIDIA 3090 <br> NVIDIA 2080TI × 2                                                                      |                                                                |
+|      | GEFORCE EXPERIENCE    | >= 546.33 |[GEFORCE EXPERIENCE download](https://us.download.nvidia.com/GFE/GFEClient/3.27.0.120/GeForce_Experience_v3.27.0.120.exe)             |                                                                                               |
+|      |  Docker Desktop           | >=  4.26.1（131620）     | [Docker Desktop for Windows](https://docs.docker.com/desktop/install/windows-install/)     |
 
 
 ### Installation
-#### step1: pull qanything repository
-```
+### step1: pull qanything repository
+```shell
 git clone https://github.com/netease-youdao/QAnything.git
 ```
-#### step2: download the model and unzip it to the root directory of the current project.
-This project provides multiple model download platforms. Choose one of the methods for downloading.
-
-[👉【WiseModel】](https://wisemodel.cn/models/Netease_Youdao/qanything)
-[👉【ModelScope】](https://www.modelscope.cn/models/netease-youdao/QAnything)
-[👉【HuggingFace】](https://huggingface.co/netease-youdao/QAnything)
-
-<details>
-<summary>Download method 1：WiseModel（recommend👍）</summary>
-
-```
+### step2: Enter the project root directory and execute the startup script.
+If you are in the Windows11 system: Need to enter the WSL environment.
+```shell
 cd QAnything
-# Make sure you have git-lfs installed (https://git-lfs.com)
-git lfs install
-git clone https://www.wisemodel.cn/Netease_Youdao/qanything.git
-unzip qanything/models.zip   # in root directory of the current project
+bash run.sh  # Start on GPU 0 by default.
 ```
-</details>
-<details>
-<summary>Download method 2：ModelScope</summary>
 
-```
+<details>
+<summary>(Optional) Specify GPU startup</summary>
+
+```shell
 cd QAnything
-# Make sure you have git-lfs installed (https://git-lfs.com)
-git lfs install
-git clone https://www.modelscope.cn/netease-youdao/QAnything.git
-unzip QAnything/models.zip   # in root directory of the current project
+bash run.sh 0  # gpu id 0
 ```
 </details>
-<details>
-<summary>Download method 3：HuggingFace</summary>
 
-```
+<details>
+<summary>(Optional) Specify multi-GPU startup </summary>
+
+```shell
 cd QAnything
-# Make sure you have git-lfs installed (https://git-lfs.com)
-git lfs install
-git clone https://huggingface.co/netease-youdao/QAnything
-unzip QAnything/models.zip   # in root directory of the current project
+bash run.sh 0,1  # gpu ids: 0,1, Please confirm how many GPUs are available. Supports up to two cards for startup. 
 ```
 </details>
 
-
-#### step3: change config
-##### in the Windows system
-```
-vim docker-compose-windows.yaml # change CUDA_VISIBLE_DEVICES to your gpu device id
-vim front_end/.env.production # set the excetly host.
-```
-##### in the Linux system
-```
-vim docker-compose-linux.yaml # change CUDA_VISIBLE_DEVICES to your gpu device id
-vim front_end/.env.production # set the excetly host.
-```
-#### step4: start server
-##### in the Windows system
-<details>
-<summary>Beginner's recommendation!</summary>
-
-```shell
-# Front desk startup, log prints to the screen in real time, press ctrl+c to stop.
-docker-compose -f docker-compose-windows.yaml up qanything_local
-```
-</details>
-
-<details>
-<summary>Recommended for experienced players!</summary>
-
-```shell
-# Background startup, ctrl+c will not stop.
-docker-compose -f docker-compose-windows.yaml up -d
-# Execute the following command to view the log.
-docker-compose -f docker-compose-windows.yaml logs qanything_local
-# Stop service
-docker-compose -f docker-compose-windows.yaml down
-```
-</details>
-
-##### in the Linux system
-<details>
-<summary>Beginner's recommendation!</summary>
-
-```shell
-# Front desk startup, log prints to the screen in real time, press ctrl+c to stop.
-docker-compose -f docker-compose-linux.yaml up qanything_local
-```
-</details>
-
-<details>
-<summary>Recommended for experienced players!</summary>
-
-```shell
-# Background startup, ctrl+c will not stop.
-docker-compose -f docker-compose-linux.yaml up -d
-# Execute the following command to view the log.
-docker-compose -f docker-compose-linux.yaml logs qanything_local
-# Stop service
-docker-compose -f docker-compose-linux.yaml down
-```
-</details>
-
+### step3: start to experience
+#### Front end
 After successful installation, you can experience the application by entering the following addresses in your web browser.
 
-- Frontend address: http://{your_host}:5052/qanything/
+- Front end address: http://`your_host`:5052/qanything/
 
-- API address: http://{your_host}:5052/api/
+#### API
+If you want to visit API, please refer to the following address:
+- API address: http://`your_host`:8777/api/
+- For detailed API documentation, please refer to [QAnything API 文档](docs/API.md)
 
-For detailed API documentation, please refer to [QAnything API 文档](docs/API.md)
+### Close service
+If you are in the Windows11 system: Need to enter the WSL environment.
+```shell
+bash close.sh
+```
+
+
+## FAQ
+[FAQ](FAQ_zh.md)
 
 
 ## Usage
@@ -274,6 +230,13 @@ Reach out to the maintainer at one of the following places:
 
 - [Github issues](https://github.com/netease-youdao/QAnything/issues)
 - Contact options listed on [this GitHub profile](https://github.com/netease-youdao)
+
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=netease-youdao/QAnything,netease-youdao/BCEmbedding&type=Date)](https://star-history.com/#netease-youdao/QAnything&netease-youdao/BCEmbedding&Date)
+
+
 
 ## License
 

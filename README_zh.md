@@ -39,8 +39,8 @@
 - [开始](#开始)
   - [必要条件](#必要条件)
   - [下载安装](#下载安装)
+- [常见问题](#常见问题)
 - [使用](#使用)
-  - [接入API](#接入API)
 - [微信群](#微信群)
 - [支持](#支持)
 - [协议](#协议)
@@ -120,130 +120,84 @@ QAnything使用的检索组件[BCEmbedding](https://github.com/netease-youdao/BC
 开源版本QAnything的大模型基于通义千问，并在大量专业问答数据集上进行微调；在千问的基础上大大加强了问答的能力。
 如果需要商用请遵循千问的license，具体请参阅：[通义千问](https://github.com/QwenLM/Qwen)
 
+## 开始之前
+**在GitHub上加星，即可立即收到新版本的通知！**
+![star_us](https://github.com/netease-youdao/QAnything/assets/29041332/fd5e5926-b9b2-4675-9f60-6cdcaca18e14)
+* [🏄 在线试用QAnything](https://qanything.ai)
+* [📚 在线试用有道速读](https://read.youdao.com)
+* [🛠️ 想只使用BCEmbedding(embedding & rerank)](https://github.com/netease-youdao/BCEmbedding)
+* [📖 常见问题](FAQ_zh.md)
+
 ## 开始
-[:point_right: 在线试用QAnything](https://qanything.ai)
 
 ### 必要条件
-|  **必要项**     | **最低要求**      | **备注** |
-| --------------         |---------------| --------------------------------- |
-| NVIDIA GPU Memory      | >= 16GB       | 推荐NVIDIA 3090|
-| NVIDIA Driver 版本      | >= 525.105.17 |                           |
-| CUDA 版本               | >= 12.0       |                           |
-| docker compose 版本     | >= 2.12.1     | [docker compose 安装教程](https://docs.docker.com/compose/install/)|
+#### **For Linux**
+|**System**| **Required item**        | **Minimum Requirement**   | **Note**                                                                           |
+|---------------------------|--------------------------|---------------------------|-------------------------------------------------------------------------|
+|Linux | Single NVIDIA GPU Memory  <br> or Double NVIDIA GPU Memory | >= 16GB <br> >= 11GB + 5G    | NVIDIA 3090 x 1 recommended <br> NVIDIA 2080TI × 2 recommended            |
+|      | NVIDIA Driver Version    | >= 525.105.17             |                                                                                               |
+|      | CUDA Version             | >= 12.0                   |                                                                                               |
+|      |  Docker version           | >= 20.10.5                |  [Docker install](https://docs.docker.com/engine/install/) |
+|      | docker compose  version  | >= 2.23.3                 | [docker compose install](https://docs.docker.com/compose/install/)  |
+
+#### **For Winodws 11 with WSL 2**
+|**System**| **Required item**        | **Minimum Requirement**   | **Note**                                                                           |
+|---------------------------|--------------------------|---------------------------|-----------------------------------------------------------------------------------------------|
+|Windows 11 with WSL 2| Single NVIDIA GPU Memory <br> or Double NVIDIA GPU Memory | >= 16GB  <br>  >= 11GB + 5G                | NVIDIA 3090 <br> NVIDIA 2080TI × 2                                                                      |                                                                |
+|      | GEFORCE EXPERIENCE    | >= 546.33 |[GEFORCE EXPERIENCE download](https://us.download.nvidia.com/GFE/GFEClient/3.27.0.120/GeForce_Experience_v3.27.0.120.exe)             |                                                                                               |
+|      |  Docker Desktop           | >=  4.26.1（131620）     | [Docker Desktop for Windows](https://docs.docker.com/desktop/install/windows-install/)     |
+
 
 ### 下载安装
-#### step1: 下载本项目
-```
+### step1: 下载本项目
+```shell
 git clone https://github.com/netease-youdao/QAnything.git
 ```
-#### step2: 下载模型并解压到本项目根目录下
-本项目提供多种模型下载平台，选择其中一个方式下载即可。
-
-[👉【始智AI】](https://wisemodel.cn/models/Netease_Youdao/qanything)
-[👉【魔搭社区】](https://www.modelscope.cn/models/netease-youdao/QAnything)
-[👉【HuggingFace】](https://huggingface.co/netease-youdao/QAnything)
-
-<details>
-<summary>下载方式1：始智AI（推荐👍）</summary>
-
-```
+### step2: 进入项目根目录执行启动脚本
+如果在Windows系统下请先进入wsl环境
+```shell
 cd QAnything
-# Make sure you have git-lfs installed (https://git-lfs.com)
-git lfs install
-git clone https://www.wisemodel.cn/Netease_Youdao/qanything.git
-unzip qanything/models.zip   # in root directory of the current project
+bash run.sh  # 默认在0号GPU上启动
 ```
-</details>
-<details>
-<summary>下载方式2：魔搭社区</summary>
 
-```
+<details>
+<summary>（可选）指定单GPU启动</summary>
+
+```shell
 cd QAnything
-# Make sure you have git-lfs installed (https://git-lfs.com)
-git lfs install
-git clone https://www.modelscope.cn/netease-youdao/QAnything.git
-unzip QAnything/models.zip   # in root directory of the current project
+bash run.sh 0  # 指定0号GPU启动 GPU编号从0开始 windows机器一般只有一张卡，所以只能指定0号GPU
 ```
 </details>
-<details>
-<summary>下载方式3：HuggingFace</summary>
 
-```
+<details>
+<summary>（可选）指定多GPU启动</summary>
+
+```shell
 cd QAnything
-# Make sure you have git-lfs installed (https://git-lfs.com)
-git lfs install
-git clone https://huggingface.co/netease-youdao/QAnything
-unzip QAnything/models.zip   # in root directory of the current project
+bash run.sh 0,1  # 指定0,1号GPU启动，请确认有多张GPU可用，最多支持两张卡启动
 ```
 </details>
 
-#### step3：修改配置
-##### 在WINDOWNS系统下：
-```
-vim docker-compose-windows.yaml # change CUDA_VISIBLE_DEVICES to your gpu device id
-vim front_end/.env.production # 设置准确的host，本地环境默认一般是localhost或0.0.0.0
-```
-##### 在Linux系统下：
-```
-# 判断当前wsl2是否是
-vim docker-compose-linux.yaml # change CUDA_VISIBLE_DEVICES to your gpu device id
-vim front_end/.env.production # 设置准确的host，本地环境默认一般是localhost或0.0.0.0
-```
-#### step4: 启动服务
-##### 在Windows系统下
-<details>
-<summary>新手推荐！</summary>
+### step3: 开始体验
 
+#### 前端页面
+运行成功后，即可在浏览器输入以下地址进行体验。
+
+- 前端地址: http://`your_host`:5052/qanything/
+
+#### API
+如果想要访问API接口，请参考下面的地址:
+- API address: http://`your_host`:8777/api/
+- For detailed API documentation, please refer to [QAnything API 文档](docs/API.md)
+
+### 关闭服务
 ```shell
-# 前台启动，日志实时打印到屏幕上，ctrl+c即可停止
-docker-compose -f docker-compose-windows.yaml up qanything_local
+bash close.sh
 ```
-</details>
 
-<details>
-<summary>老手推荐！</summary>
+## 常见问题
+[常见问题](FAQ_zh.md)
 
-```shell
-# 后台启动，ctrl+c不会停止
-docker-compose -f docker-compose-windows.yaml up -d
-# 执行如下命令查看日志
-docker-compose -f docker-compose-windows.yaml logs qanything_local
-# 停止服务
-docker-compose -f docker-compose-windows.yaml down
-```
-</details>
-
-##### 在Linux系统下
-<details>
-<summary>新手推荐！</summary>
-
-```shell
-# 前台启动，日志实时打印到屏幕上，ctrl+c即可停止
-docker-compose -f docker-compose-linux.yaml up qanything_local
-```
-</details>
-
-<details>
-<summary>老手推荐！</summary>
-
-```shell
-# 后台启动，ctrl+c不会停止
-docker-compose -f docker-compose-linux.yaml up -d
-# 执行如下命令查看日志
-docker-compose -f docker-compose-linux.yaml logs qanything_local
-# 停止服务
-docker-compose -f docker-compose-linux.yaml down
-```
-</details>
-
-
-安装成功后，即可在浏览器输入以下地址进行体验。
-
-- 前端地址: http://{your_host}:5052/qanything/
-
-- api地址: http://{your_host}:5052/api/
-
-详细API文档请移步[QAnything API 文档](docs/API.md)
 
 ## 使用
 ### 跨语种：多篇英文论文问答
@@ -270,6 +224,10 @@ docker-compose -f docker-compose-linux.yaml down
 
 - [Github issues](https://github.com/netease-youdao/QAnything/issues)
 - [Netease Youdao](https://github.com/netease-youdao)
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=netease-youdao/QAnything,netease-youdao/BCEmbedding&type=Date)](https://star-history.com/#netease-youdao/QAnything&netease-youdao/BCEmbedding&Date)
 
 ## 协议
 
